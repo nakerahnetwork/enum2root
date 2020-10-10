@@ -60,6 +60,5 @@ def detailedEnum(IP, WORDLIST):
     gobusterBasic(IP, WORDLIST)
 
 #basicEnum(sys.argv[1], sys.argv[2])
-#detailedEnum(sys.argv[1], sys.argv[2])
-mkdirs()
+detailedEnum(sys.argv[1], sys.argv[2])
 
