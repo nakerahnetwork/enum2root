@@ -11,4 +11,4 @@ python3 enum2root.py [IP] [Wordlist]
 script will run and produces logs with the output the following:
 - nmap basic scan (-sC -sV)
 - nmap full port scan (-p-)
-- gobuster with your specified wordlist (-x txt,php)
+- gobuster with your specified wordlist (-x txt)
