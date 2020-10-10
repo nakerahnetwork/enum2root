@@ -19,4 +19,4 @@ script will run and produces logs with the output the following:
 	- [ ] FTP + Anonymous login --> get files
 	- [ ] Spider port 80 for dns name
 - [ ] get vulns with CVE data using searchsploit
-
+- [ ] concurrency using threading/multiprocessing
