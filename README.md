@@ -14,9 +14,9 @@ script will run and produces logs with the output the following:
 - gobuster with your specified wordlist (-x txt)
 
 ### To-Do:
-[ ] full port scan with service detection
-[ ] get services details and docs from the internet (ippsec.rocks)
-	[ ] FTP + Anonymous login --> get files
-	[ ] Spider port 80 for dns name
-[ ] get vulns with CVE data using searchsploit
+- [ ] full port scan with service detection
+- [ ] get services details and docs from the internet (ippsec.rocks)
+	- [ ] FTP + Anonymous login --> get files
+	- [ ] Spider port 80 for dns name
+- [ ] get vulns with CVE data using searchsploit
 
