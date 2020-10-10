@@ -46,7 +46,7 @@ def parseXMLnmap(file):
     return ports
 ##Gobuster##
 def gobusterBasic(IP, WORDLIST):
-    scan = subprocess.run("gobuster dir -u http://{} -w {} -t 35 -x txt,php -o dirbasic.log".format(IP,WORDLIST), capture_output = True, shell = True)
+    scan = subprocess.run("gobuster dir -u http://{} -w {} -t 35 -x txt,php -o dirbasic.log".format(IP,WORDLIST), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
     out = scan.stdout.decode()
     return out
 
