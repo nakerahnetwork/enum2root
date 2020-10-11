@@ -25,6 +25,7 @@ def masscanFull(IP):
 
 def nmapFullDetailed(IP,ports):
     logging.info("Starting a detailed nmap scan with masscan results")
+    nmap = nmap3.Nmap()
     scan = nmap.nmap_version_detection(str(IP), args="-sC -p {} -T5 --min-rate=1000 --max-retries=2".format(ports))
     return scan #JSON Object
 
