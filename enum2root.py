@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-import subprocess, sys
+import nmap3
+import subprocess
+import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 import logging
@@ -14,51 +16,39 @@ def mkdirs():
     Path("nmap/basic").mkdir(parents=True, exist_ok=True)
     Path("nmap/full").mkdir(parents=True, exist_ok=True)
 
-##nmap##
-def nmapBasicDetailed(IP):
-    mkdirs()
-    logging.info("Initiating Basic Detailed nmap Scan")
-    scan = subprocess.run("nmap -sC -sV -T4 -oA  nmap/basic/fast {} ".format(IP), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
+##masscan##
+def masscanFull(IP):
+    logging.info("Scanning all ports with masscan")
+    scan = subprocess.run("masscan -p1-65535,U:1-65535 {} --rate=1000 -oX -".format(IP), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
     out = scan.stdout.decode()
     return out
 
-def nmapFullBasic(IP):
-    mkdirs()
-    logging.info("Initiating Full Basic Scan")
-    scan = subprocess.run("nmap -p- -T5 --open -sSU --min-rate=1000 --max-retries=2 -oA nmap/full/fast {}".format(IP), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
+def nmapFullDetailed(IP,ports):
+    logging.info("Starting a detailed nmap scan with masscan results")
+    scan = nmap.nmap_version_detection("10.10.41.38", args="-sC -T5 --min-rate=1000 --max-retries=2")
+    #scan = subprocess.run("nmap -p {} -sC -sV -T4 -oA ports.log {} ".format(ports, IP), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
     out = scan.stdout.decode()
     return out
 
-def nmapFullDetailed(IP):
-    mkdirs()
-    nmapFullBasic(IP)
-    logging.info("Initiating Full Detailed Scan")
-    ports = ",".join(parseXMLnmap("nmap/full/fast.xml"))
-    scan = subprocess.run("nmap -p {} -sC -sV -T4 -oA nmap/full/detailed {} ".format(ports, IP), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
-    out = scan.stdout.decode()
-    return out
-
-def parseXMLnmap(file):
+def parseXML(XML):
     logging.info("parsing XML files")
-    tree = ET.parse("{}".format(file))
+    #tree = ET.parse("{}".format(file))
+    tree = ET.ElementTree(ET.fromstring(XML))
     root = tree.getroot()
     ports = [port.get('portid') for port in root.findall('.//port')]
-    return ports
-##Gobuster##
-def gobusterBasic(IP, WORDLIST):
-    scan = subprocess.run("gobuster dir -u http://{} -w {} -t 35 -x txt,php -o dirbasic.log".format(IP,WORDLIST), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
-    out = scan.stdout.decode()
-    return out
+    ports_string = ",".join(ports)
+    return ports_string
 
 def basicEnum(IP, WORDLIST):
     nmapBasicDetailed(IP)
     nmapFullBasic(IP)
     gobusterBasic(IP, WORDLIST)
 
-def detailedEnum(IP, WORDLIST):
-    nmapFullDetailed(IP)
-    gobusterBasic(IP, WORDLIST)
-
+def detailedEnum(IP):
+    scan = masscanFull(IP)
+    ports = parseXML(scan)
+    final = nmapFullDetailed(IP,ports)
+    return final
 #basicEnum(sys.argv[1], sys.argv[2])
-detailedEnum(sys.argv[1], sys.argv[2])
+#print(detailedEnum(sys.argv[1]))
 
