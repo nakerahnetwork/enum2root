@@ -43,4 +43,4 @@ def portEnum(IP):
     final = nmapFullDetailed(IP,ports)
     return final #JSON Output with all the needed details
 
-print(portEnum(argv[1]))
+print(portEnum(sys.argv[1]))
