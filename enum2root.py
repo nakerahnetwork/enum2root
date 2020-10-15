@@ -35,7 +35,7 @@ def parseXML(XML):
     root = tree.getroot()
     ports = [port.get('portid') for port in root.findall('.//port')]
     ports_string = ",".join(ports)
-    return ports_string
+    return ports_string # A list with the ports ex: ['80', '22', '443']
 
 def portEnum(IP):
     scan = masscanFull(IP)
